@@ -1,0 +1,35 @@
+name: Windows Build
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  setup-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+#      - name: Set execution policy for PowerShell
+#        run: Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+#
+#      - name: Install Scoop
+#        shell: powershell
+#        run: irm get.scoop.sh | iex
+#
+#      - name: Install MinGW and CMake via Scoop
+#        shell: powershell
+#        run: |
+#          scoop install mingw cmake
+
+      - name: Check g++ version
+        shell: powershell
+        run: g++ --version
+
+      - name: Check CMake version
+        shell: powershell
+        run: cmake --version
