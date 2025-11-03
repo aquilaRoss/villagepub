@@ -28,6 +28,4 @@ cmake --build .
 
 # Make sure you have the needed dll
 copy ..\raylib\install\bin\*.dll .
-# or like this
-copy ..\artifacts\*.dll .
 # we can "install" it and add it to the path later... for now, just put it next to the exe
