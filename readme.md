@@ -38,6 +38,12 @@ New-Item -ItemType Directory -Force -Path android\java | Out-Null
 Invoke-WebRequest -Uri "https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.16%2B8/OpenJDK17U-jdk_x64_windows_hotspot_17.0.16_8.zip" -OutFile "android\java\jdk17.zip"
 Expand-Archive "android\java\jdk17.zip" -DestinationPath "android\java\jdk17"
 
+## Gradle (Should only need to do this once)
+
+Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+irm get.scoop.sh | iex
+scoop install gradle
+
 ## Download and Install the SDK (Should only need to do this once)
 
 New-Item -ItemType Directory -Force -Path android\sdk | Out-Null
