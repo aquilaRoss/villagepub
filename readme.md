@@ -8,9 +8,10 @@ irm get.scoop.sh | iex
 
 # CMake and MinGW
 scoop install mingw cmake
-# You can check this with
-# g++ --version
-# cmake --version
+
+### You can check this with
+g++ --version
+cmake --version
 
 # Get and Build Raylib
 git clone https://github.com/raysan5/raylib.git
@@ -25,7 +26,3 @@ cd ../..
 mkdir build && cd build
 cmake -G "MinGW Makefiles" ..
 cmake --build .
-
-# Make sure you have the needed dll
-copy ..\raylib\install\bin\*.dll .
-# we can "install" it and add it to the path later... for now, just put it next to the exe
