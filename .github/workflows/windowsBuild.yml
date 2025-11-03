@@ -44,8 +44,8 @@ jobs:
         run: |
           mkdir -p build
           cd build
-          cmake -G "MinGW Makefiles" ..
-          cmake --build .
+          cmake -G "MinGW Makefiles" .. -DPLATFORM=Windows
+          cmake --build . --config Release
         shell: bash
 
       - name: Upload built game

@@ -27,8 +27,8 @@ cd ../..
 
 ## Build App
 mkdir build && cd build
-cmake -G "MinGW Makefiles" ..
-cmake --build .
+cmake -G "MinGW Makefiles" .. -DPLATFORM=Windows
+cmake --build . --config Release
 
 # Android
 
@@ -93,8 +93,8 @@ cmake --install . --prefix ../../artifacts/raylib/install
 
 ## Now the App
 mkdir build && cd build
-cmake -G "MinGW Makefiles" ..
-cmake --build .
+cmake .. -G "Ninja" -DCMAKE_TOOLCHAIN_FILE="$env:ANDROID_SDK_ROOT/ndk/26.3.11579264/build/cmake/android.toolchain.cmake" -DPLATFORM=Android -DANDROID_ABI=arm64-v8a -DANDROID_PLATFORM=android-24 -DCMAKE_BUILD_TYPE=Release
+cmake --build . --config Release --target all
 
 
 
