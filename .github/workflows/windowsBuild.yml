@@ -35,3 +35,9 @@ jobs:
           cmake -G "MinGW Makefiles" ..
           cmake --build .
         shell: bash
+
+      - name: Upload built game
+        uses: actions/upload-artifact@v3
+        with:
+            name: MyGame
+            path: build/MyGame.exe
