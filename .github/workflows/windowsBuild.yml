@@ -14,6 +14,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+#      - name: Install MinGW and CMake (optional, already installed on GitHub runners)
+#        shell: powershell
+#        run: |
+#            # Set execution policy so scripts can run
+#            Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+#
+#            # Install Scoop (PowerShell-only)
+#            irm get.scoop.sh | iex
+#
+#            # Install MinGW and CMake
+#            scoop install mingw cmake
+
       - name: Clone Raylib
         run: |
           git clone --branch 5.5 --depth 1 https://github.com/raysan5/raylib.git raylib
