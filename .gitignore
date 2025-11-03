@@ -1,4 +1,5 @@
 raylib/
 build/
 artifacts/
-android/
+android/sdk
+android/java

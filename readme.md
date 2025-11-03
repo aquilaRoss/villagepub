@@ -40,7 +40,7 @@ Expand-Archive "android\java\jdk17.zip" -DestinationPath "android\java\jdk17"
 
 ## Download and Install the SDK (Should only need to do this once)
 
-New-Item -ItemType Directory -Force -Path android\sdk, android\ndk, android\build, android\cmake, android\gradle | Out-Null
+New-Item -ItemType Directory -Force -Path android\sdk | Out-Null
 set ANDROID_SDK_ROOT=%CD%\android\sdk
 set ANDROID_HOME=%ANDROID_SDK_ROOT%
 Invoke-WebRequest https://dl.google.com/android/repository/commandlinetools-win-11076708_latest.zip -OutFile android\sdk\cmdline-tools.zip
