@@ -6,6 +6,7 @@ TEST(RNGTest, GeneratesNumbersInRange) {
     int val = myRNG->next(0, 10); // example function
     EXPECT_GE(val, 0);
     EXPECT_LE(val, 10);
+    EXPECT_TRUE(false);
 }
 
 int main(int argc, char **argv) {
