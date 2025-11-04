@@ -13,13 +13,4 @@ add_executable(${CMAKE_PROJECT_NAME} main/main.cpp)
 
 add_subdirectory(commonSource)
 
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${RAYLIB_ROOT}/include")
-target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE "${RAYLIB_ROOT}/lib")
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE 
-    raylib
-    opengl32
-    gdi32
-    winmm
-    shell32
-    user32
-)
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE commonSource)

@@ -1,9 +1,7 @@
 
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
-)
+target_include_directories(commonSource PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE 
+target_sources(commonSource PRIVATE 
     logger.cpp
     raylibLogging.cpp
 )
