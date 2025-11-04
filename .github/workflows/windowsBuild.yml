@@ -17,27 +17,13 @@ jobs:
 #      - name: Install MinGW and CMake (optional, already installed on GitHub runners)
 #        shell: powershell
 #        run: |
-#            # Set execution policy so scripts can run
 #            Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-#
-#            # Install Scoop (PowerShell-only)
 #            irm get.scoop.sh | iex
-#
-#            # Install MinGW and CMake
 #            scoop install mingw cmake
 
       - name: Clone Raylib
         run: |
           git clone --branch 5.5 --depth 1 https://github.com/raysan5/raylib.git raylib
-        shell: bash
-
-      - name: Build and install Raylib
-        run: |
-          mkdir -p raylib/build
-          cd raylib/build
-          cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX=../../artifacts/raylib/install ..
-          cmake --build .
-          cmake --install . --prefix ../../artifacts/raylib/install
         shell: bash
 
       - name: Build Project
