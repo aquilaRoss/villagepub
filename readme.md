@@ -14,7 +14,7 @@ scoop install mingw cmake
 ### Then check again with the commands from before
 
 # Clone Raylib
-git clone https://github.com/raysan5/raylib.git
+git clone --branch 5.5 --depth 1 https://github.com/raysan5/raylib.git raylib
 
 # Build App
 mkdir build && cd build
