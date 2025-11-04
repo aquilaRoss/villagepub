@@ -40,9 +40,11 @@ jobs:
         shell: bash
 
       - name: Run Unit Tests
+        id: run_tests
         run: |
           mkdir -p build/test-results
           ./build/tests/RNGTests.exe --gtest_output=xml:build/test-results/RNGTests.xml
+          echo "exit_code=$?" >> $GITHUB_OUTPUT
         shell: bash
         continue-on-error: true
 
@@ -53,7 +55,7 @@ jobs:
           path: build/test-results
 
       - name: Fail if tests failed
-        if: ${{ steps.run_tests.outcome != 'success' }}
+        if: ${{ steps.run_tests.outputs.exit_code != '0' }}
         run: |
           echo "Some tests failed!"
           exit 1
