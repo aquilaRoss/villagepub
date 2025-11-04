@@ -13,7 +13,7 @@ public:
 	std::string name() const override;
 	void name(const std::string & name) override;
 
-	void restart(int seed, int numberOfTimesCalled) override;
+	void advanceTo(int seed, int numberOfTimesCalled) override;
 	int next(int min, int max) override;
 	bool next() override;
 

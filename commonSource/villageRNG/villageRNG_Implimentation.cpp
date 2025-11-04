@@ -6,7 +6,7 @@ VillageRNGImplimentation::VillageRNGImplimentation(int seed, int numberOfTimesCa
 {
 	_name = name;
 	_numberOfTimesCalled = 0;
-	restart(seed, numberOfTimesCalled);
+	advanceTo(seed, numberOfTimesCalled);
 }
 
 std::string VillageRNGImplimentation::name() const
@@ -19,14 +19,14 @@ void VillageRNGImplimentation::name(const std::string & name)
 	_name = name;
 }
 
-void VillageRNGImplimentation::restart(int seed, int numberOfTimesCalled)
+void VillageRNGImplimentation::advanceTo(int seed, int numberOfTimesCalled)
 {
 	_seed = seed;
 	_rawRNG.seed(_seed);
 	
 	for (int index = 0; index < numberOfTimesCalled; index++)
 	{
-		_rawRNG.d();
+		next();
 		_numberOfTimesCalled++;
 	}
 }
