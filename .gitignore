@@ -1,4 +1,5 @@
 raylib/
+tests/googletest/
 build/
 raylib_build/
 artifacts/

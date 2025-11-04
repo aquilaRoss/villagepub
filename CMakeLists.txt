@@ -14,3 +14,8 @@ add_executable(${CMAKE_PROJECT_NAME} main/main.cpp)
 add_subdirectory(commonSource)
 
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE commonSource)
+
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(tests)
+endif()

@@ -26,12 +26,22 @@ jobs:
           git clone --branch 5.5 --depth 1 https://github.com/raysan5/raylib.git raylib
         shell: bash
 
+      - name: Clone Googletest
+        run: |
+          git clone --branch v1.17.0 --depth 1 https://github.com/google/googletest.git tests/googletest
+        shell: bash
+
       - name: Build Project
         run: |
           mkdir -p build
           cd build
-          cmake -G "MinGW Makefiles" ..
+          cmake -G "MinGW Makefiles" -DBUILD_TESTS=ON ..
           cmake --build .
+        shell: bash
+
+      - name: Run Unit Tests
+        run: |
+          ./build/tests/RNGTests.exe
         shell: bash
 
       - name: Upload built game
