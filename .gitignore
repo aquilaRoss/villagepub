@@ -1,4 +1,5 @@
 raylib/
 build/
+raylib_build/
 artifacts/
 android/

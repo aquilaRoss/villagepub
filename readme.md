@@ -13,14 +13,8 @@ scoop install mingw cmake
 
 ### Then check again with the commands from before
 
-# Get and Build Raylib
+# Clone Raylib
 git clone https://github.com/raysan5/raylib.git
-mkdir raylib/build
-cd raylib/build
-cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../../artifacts/raylib/install ..
-cmake --build .
-cmake --install . --prefix ../../artifacts/raylib/install
-cd ../..
 
 # Build App
 mkdir build && cd build
