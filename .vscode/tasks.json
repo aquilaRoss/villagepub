@@ -1,0 +1,34 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Configure MyGame",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-G", "MinGW Makefiles",
+                "-S", ".",
+                "-B", "build"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Build MyGame",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build", "build"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": ["Configure MyGame"],
+            "problemMatcher": []
+        }
+    ]
+}
