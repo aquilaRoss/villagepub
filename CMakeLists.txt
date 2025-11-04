@@ -17,6 +17,7 @@ if(NOT EXISTS "${RAYLIB_ROOT}/lib/libraylib.a" AND NOT EXISTS "${RAYLIB_ROOT}/li
         # Define a build directory for raylib inside the main build folder
         set(RAYLIB_BUILD_DIR "${CMAKE_CURRENT_SOURCE_DIR}/raylib_build")
         file(MAKE_DIRECTORY "${RAYLIB_BUILD_DIR}")
+        file(MAKE_DIRECTORY "${RAYLIB_ROOT}")
 
         execute_process(
             COMMAND ${CMAKE_COMMAND} -G "MinGW Makefiles"
