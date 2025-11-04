@@ -44,22 +44,14 @@ jobs:
           mkdir -p build/test-results
           ./build/tests/RNGTests.exe --gtest_output=xml:build/test-results/RNGTests.xml
         shell: bash
-        continue-on-error: true # not sure I need this if the if: always() works right?
-
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: build/test-results
 
       - name: Upload Test Report (PR Check)
-        if: always()
         uses: dorny/test-reporter@v2
+        if: ${{ !cancelled() }}       # run this step even if previous step failed
         with:
           name: RNGTests - PR Check
           path: build/test-results/*.xml
-          reporter: junit
+          reporter: java-junit
           fail-on-error: true
 
       - name: Upload built game
