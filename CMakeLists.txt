@@ -11,7 +11,7 @@ include(cmake/BuildRaylib.cmake)
 
 add_executable(${CMAKE_PROJECT_NAME} main/main.cpp)
 
-#add_subdirectory(src)
+add_subdirectory(commonSource)
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE "${RAYLIB_ROOT}/include")
 target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE "${RAYLIB_ROOT}/lib")

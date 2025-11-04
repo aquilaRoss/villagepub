@@ -3,3 +3,6 @@ build/
 raylib_build/
 artifacts/
 android/
+
+.vscode/settings.json
+*.log
