@@ -25,6 +25,7 @@ jobs:
             g++ \
             libgl1-mesa-dev \
             libx11-dev \
+            libxrandr-dev \
             libasound2-dev
 
       - name: Clone Raylib
