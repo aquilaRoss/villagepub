@@ -68,10 +68,9 @@ jobs:
           7z x mesa3d.7z -o"mesa3d"
           Write-Host "Extracted files:"
           Get-ChildItem -Recurse mesa3d | Select-Object FullName
-          Copy-Item "mesa3d\x64\opengl32.dll" "build\"
-          Copy-Item "mesa3d\x64\libgallium_wgl.dll" "build\"
+          Copy-Item "mesa3d\x64\*.dll" "build\"
           Write-Host "build\ DLLs:"
-          Get-ChildItem build\*.dll | Select-Object Name
+          Get-ChildItem "build\*.dll" | ForEach-Object { Write-Host $_.Name }
 
       - name: Smoke test MyGame
         if: env.SMOKE_TEST == 'true'
