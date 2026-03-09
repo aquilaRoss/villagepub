@@ -13,8 +13,14 @@ if(NOT EXISTS "${RAYLIB_ROOT}/lib/libraylib.a" AND NOT EXISTS "${RAYLIB_ROOT}/li
         file(MAKE_DIRECTORY "${RAYLIB_BUILD_DIR}")
         file(MAKE_DIRECTORY "${RAYLIB_ROOT}")
 
+        if(WIN32)
+            set(RAYLIB_GENERATOR "MinGW Makefiles")
+        else()
+            set(RAYLIB_GENERATOR "Unix Makefiles")
+        endif()
+
         execute_process(
-            COMMAND ${CMAKE_COMMAND} -G "MinGW Makefiles"
+            COMMAND ${CMAKE_COMMAND} -G "${RAYLIB_GENERATOR}"
                     -DCMAKE_BUILD_TYPE=Release
                     -DCMAKE_INSTALL_PREFIX=${RAYLIB_ROOT}
                     ${CMAKE_CURRENT_SOURCE_DIR}/raylib
