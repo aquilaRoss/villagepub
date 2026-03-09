@@ -1,0 +1,60 @@
+name: Linux Build
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  setup-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            cmake \
+            g++ \
+            libgl1-mesa-dev \
+            libx11-dev \
+            libasound2-dev
+
+      - name: Clone Raylib
+        run: |
+          git clone --branch 5.5 --depth 1 https://github.com/raysan5/raylib.git raylib
+
+      - name: Clone Googletest
+        run: |
+          git clone --branch v1.17.0 --depth 1 https://github.com/google/googletest.git tests/googletest
+
+      - name: Build Project
+        run: |
+          mkdir -p build
+          cd build
+          cmake -DBUILD_TESTS=ON ..
+          cmake --build .
+
+      - name: Run Unit Tests
+        run: |
+          mkdir -p build/test-results
+          ./build/tests/RNGTests --gtest_output=xml:build/test-results/RNGTests.xml
+
+      - name: Upload Test Report
+        uses: dorny/test-reporter@v2
+        if: ${{ !cancelled() }}
+        with:
+          name: RNGTests - Linux
+          path: build/test-results/*.xml
+          reporter: java-junit
+          fail-on-error: true
+
+      - name: Upload built game
+        uses: actions/upload-artifact@v4
+        with:
+          name: MyGame-Linux
+          path: build/MyGame

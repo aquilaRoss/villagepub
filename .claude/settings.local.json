@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(g++ --version)",
+      "Bash(cmake --version)",
+      "Bash(mkdir -p build)",
+      "Bash(cmake -G \"MinGW Makefiles\" -S . -B build -DBUILD_TESTS=ON)"
+    ]
+  }
+}
