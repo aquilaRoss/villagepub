@@ -44,7 +44,7 @@ cmake --build .
 
 ## Things to Keep in Mind
 - `cmake/BuildRaylib.cmake` must remain platform-aware (no hardcoded generators)
-- Linux CI installs only confirmed-needed packages: `libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libasound2-dev` — add more only if the pipeline fails with a specific missing dependency
+- Linux CI installs only confirmed-needed packages: `libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libasound2-dev` — add more only if the pipeline fails with a specific missing dependency
 - The game artifact on Windows is `MyGame.exe`, on Linux it is `MyGame`
 
 ## Areas We Are Still Setting Up
