@@ -42,6 +42,11 @@ cmake --build .
 .\tests\RNGTests.exe
 ```
 
+## CI Smoke Test Notes
+- Linux smoke test works via `xvfb-run` (Mesa software rendering provides OpenGL)
+- Windows CI runners have no GPU/OpenGL driver — Raylib segfaults on startup, smoke test not possible
+- Windows binary is verified locally by the developer
+
 ## Things to Keep in Mind
 - `cmake/BuildRaylib.cmake` must remain platform-aware (no hardcoded generators)
 - Linux CI installs only confirmed-needed packages: `libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libasound2-dev` — add more only if the pipeline fails with a specific missing dependency
