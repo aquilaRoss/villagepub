@@ -26,6 +26,7 @@ jobs:
             libgl1-mesa-dev \
             libx11-dev \
             libxrandr-dev \
+            libxinerama-dev \
             libasound2-dev
 
       - name: Clone Raylib
