@@ -49,6 +49,10 @@ jobs:
           cmake --build .
         shell: bash
 
+      - name: Smoke test MyGame
+        run: timeout 5 ./build/MyGame.exe || [ $? -eq 124 ]
+        shell: bash
+
       - name: Run Unit Tests
         run: |
           mkdir -p build/test-results
