@@ -17,12 +17,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set short SHA
+        id: vars
+        run: echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             cmake \
             g++ \
+            xvfb \
             libgl1-mesa-dev \
             libx11-dev \
             libxrandr-dev \
@@ -46,6 +51,9 @@ jobs:
           cmake -DBUILD_TESTS=ON ..
           cmake --build .
 
+      - name: Smoke test MyGame
+        run: xvfb-run --auto-servernum timeout 5 ./build/MyGame || [ $? -eq 124 ]
+
       - name: Run Unit Tests
         run: |
           mkdir -p build/test-results
@@ -63,5 +71,5 @@ jobs:
       - name: Upload built game
         uses: actions/upload-artifact@v4
         with:
-          name: MyGame-Linux
+          name: MyGame-linux-${{ steps.vars.outputs.SHORT_SHA }}
           path: build/MyGame

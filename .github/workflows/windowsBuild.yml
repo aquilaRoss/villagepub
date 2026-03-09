@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -20,6 +23,13 @@ jobs:
 #            Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 #            irm get.scoop.sh | iex
 #            scoop install mingw cmake
+
+      - name: Set short SHA
+        id: vars
+        shell: pwsh
+        run: |
+          $short = $env:GITHUB_SHA.Substring(0,7)
+          echo "SHORT_SHA=$short" >> $env:GITHUB_OUTPUT
 
       - name: Clone Raylib
         run: |
@@ -45,11 +55,11 @@ jobs:
           ./build/tests/RNGTests.exe --gtest_output=xml:build/test-results/RNGTests.xml
         shell: bash
 
-      - name: Upload Test Report (PR Check)
+      - name: Upload Test Report
         uses: dorny/test-reporter@v2
-        if: ${{ !cancelled() }}       # run this step even if previous step failed
+        if: ${{ !cancelled() }}
         with:
-          name: RNGTests - PR Check
+          name: RNGTests - Windows
           path: build/test-results/*.xml
           reporter: java-junit
           fail-on-error: true
@@ -57,5 +67,5 @@ jobs:
       - name: Upload built game
         uses: actions/upload-artifact@v4
         with:
-            name: MyGame
-            path: build/MyGame.exe
+          name: MyGame-windows-${{ steps.vars.outputs.SHORT_SHA }}
+          path: build/MyGame.exe
