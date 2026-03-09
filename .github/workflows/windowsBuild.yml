@@ -62,10 +62,16 @@ jobs:
         if: env.SMOKE_TEST == 'true'
         shell: pwsh
         run: |
+          $ErrorActionPreference = "Stop"
           Invoke-WebRequest -Uri "https://github.com/pal1000/mesa-dist-win/releases/download/24.3.4/mesa3d-24.3.4-release-mingw.7z" -OutFile "mesa3d.7z"
-          7z x mesa3d.7z -o"mesa3d" | Out-Null
+          Write-Host "Downloaded: $((Get-Item mesa3d.7z).Length) bytes"
+          7z x mesa3d.7z -o"mesa3d"
+          Write-Host "Extracted files:"
+          Get-ChildItem -Recurse mesa3d | Select-Object FullName
           Copy-Item "mesa3d\x64\opengl32.dll" "build\"
           Copy-Item "mesa3d\x64\libgallium_wgl.dll" "build\"
+          Write-Host "build\ DLLs:"
+          Get-ChildItem build\*.dll | Select-Object Name
 
       - name: Smoke test MyGame
         if: env.SMOKE_TEST == 'true'
