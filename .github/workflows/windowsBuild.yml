@@ -49,6 +49,18 @@ jobs:
           cmake --build .
         shell: bash
 
+      - name: Install Mesa3D (software OpenGL for CI)
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/pal1000/mesa-dist-win/releases/download/24.3.4/mesa3d-24.3.4-release-mingw.7z" -OutFile "mesa3d.7z"
+          7z x mesa3d.7z -o"mesa3d" | Out-Null
+          Copy-Item "mesa3d\x64\opengl32.dll" "build\"
+          Copy-Item "mesa3d\x64\libgallium_wgl.dll" "build\"
+
+      - name: Smoke test MyGame
+        run: timeout 5 ./build/MyGame.exe || [ $? -eq 124 ]
+        shell: bash
+
       - name: Run Unit Tests
         run: |
           mkdir -p build/test-results
