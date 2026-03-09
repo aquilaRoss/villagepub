@@ -8,6 +8,15 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      smoke_test:
+        description: 'Run Mesa3D smoke test'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  SMOKE_TEST: ${{ github.event.inputs.smoke_test || 'true' }}
 
 jobs:
   setup-windows:
@@ -50,6 +59,7 @@ jobs:
         shell: bash
 
       - name: Install Mesa3D (software OpenGL for CI)
+        if: env.SMOKE_TEST == 'true'
         shell: pwsh
         run: |
           Invoke-WebRequest -Uri "https://github.com/pal1000/mesa-dist-win/releases/download/24.3.4/mesa3d-24.3.4-release-mingw.7z" -OutFile "mesa3d.7z"
@@ -58,6 +68,7 @@ jobs:
           Copy-Item "mesa3d\x64\libgallium_wgl.dll" "build\"
 
       - name: Smoke test MyGame
+        if: env.SMOKE_TEST == 'true'
         run: timeout 5 ./build/MyGame.exe || [ $? -eq 124 ]
         shell: bash
 
