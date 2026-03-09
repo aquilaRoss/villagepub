@@ -44,8 +44,9 @@ cmake --build .
 
 ## CI Smoke Test Notes
 - Linux smoke test works via `xvfb-run` (Mesa software rendering provides OpenGL)
-- Windows CI runners have no GPU/OpenGL driver — Raylib segfaults on startup, smoke test not possible
-- Windows binary is verified locally by the developer
+- Windows smoke test works by copying all Mesa3D x64 DLLs into `build\` before running — this provides software OpenGL since the CI runner has no GPU driver
+- Mesa3D is downloaded from `github.com/pal1000/mesa-dist-win` as a `.7z` and all `x64\*.dll` files are copied alongside the exe
+- Smoke test is toggleable via `SMOKE_TEST` env var or the `smoke_test` input on manual dispatch
 
 ## Things to Keep in Mind
 - `cmake/BuildRaylib.cmake` must remain platform-aware (no hardcoded generators)
