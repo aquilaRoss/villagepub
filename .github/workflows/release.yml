@@ -160,6 +160,6 @@ jobs:
         run: |
           gh release create "${{ github.ref_name }}" \
             --title "${{ github.ref_name }}" \
-            --notes "See the [README](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/README.md) for details." \
+            --notes "See the [readme](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/readme.md) for details." \
             "MyGame-windows-${{ github.ref_name }}.zip" \
             "MyGame-linux-${{ github.ref_name }}.tar.gz"
