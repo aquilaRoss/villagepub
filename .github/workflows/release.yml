@@ -1,0 +1,165 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+
+  # ──────────────────────────────────────────────
+  # Windows build + test
+  # ──────────────────────────────────────────────
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Clone Raylib
+        shell: bash
+        run: git clone --branch 5.5 --depth 1 https://github.com/raysan5/raylib.git raylib
+
+      - name: Clone Googletest
+        shell: bash
+        run: git clone --branch v1.17.0 --depth 1 https://github.com/google/googletest.git tests/googletest
+
+      - name: Build Project
+        shell: bash
+        run: |
+          mkdir -p build
+          cd build
+          cmake -G "MinGW Makefiles" -DBUILD_TESTS=ON ..
+          cmake --build .
+
+      - name: Run Unit Tests
+        shell: bash
+        run: |
+          mkdir -p build/test-results
+          ./build/tests/RNGTests.exe --gtest_output=xml:build/test-results/RNGTests.xml
+
+      - name: Upload Test Report
+        uses: dorny/test-reporter@v2
+        if: ${{ !cancelled() }}
+        with:
+          name: RNGTests - Windows (Release ${{ github.ref_name }})
+          path: build/test-results/*.xml
+          reporter: java-junit
+          fail-on-error: true
+
+      - name: Bundle Windows release
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path release | Out-Null
+          Copy-Item "build\MyGame.exe" "release\"
+
+          # Copy MinGW runtime DLLs so the exe runs on machines without MinGW installed
+          $gcc     = (Get-Command gcc).Source
+          $mingwBin = Split-Path $gcc
+          foreach ($dll in @("libgcc_s_seh-1.dll", "libstdc++-6.dll", "libwinpthread-1.dll")) {
+            $src = Join-Path $mingwBin $dll
+            if (Test-Path $src) {
+              Copy-Item $src "release\"
+              Write-Host "Bundled: $dll"
+            } else {
+              Write-Host "Not found (skipped): $dll"
+            }
+          }
+
+          Compress-Archive -Path "release\*" -DestinationPath "MyGame-windows-${{ github.ref_name }}.zip"
+
+      - name: Upload Windows artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release
+          path: MyGame-windows-${{ github.ref_name }}.zip
+
+  # ──────────────────────────────────────────────
+  # Linux build + test
+  # ──────────────────────────────────────────────
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            cmake g++ xvfb \
+            libgl1-mesa-dev libx11-dev libxrandr-dev \
+            libxinerama-dev libxcursor-dev libxi-dev libasound2-dev
+
+      - name: Clone Raylib
+        run: git clone --branch 5.5 --depth 1 https://github.com/raysan5/raylib.git raylib
+
+      - name: Clone Googletest
+        run: git clone --branch v1.17.0 --depth 1 https://github.com/google/googletest.git tests/googletest
+
+      - name: Build Project
+        run: |
+          mkdir -p build
+          cd build
+          cmake -DBUILD_TESTS=ON ..
+          cmake --build .
+
+      - name: Run Unit Tests
+        run: |
+          mkdir -p build/test-results
+          ./build/tests/RNGTests --gtest_output=xml:build/test-results/RNGTests.xml
+
+      - name: Upload Test Report
+        uses: dorny/test-reporter@v2
+        if: ${{ !cancelled() }}
+        with:
+          name: RNGTests - Linux (Release ${{ github.ref_name }})
+          path: build/test-results/*.xml
+          reporter: java-junit
+          fail-on-error: true
+
+      - name: Bundle Linux release
+        run: |
+          mkdir -p release
+          cp build/MyGame release/
+          chmod +x release/MyGame
+          tar -czf MyGame-linux-${{ github.ref_name }}.tar.gz -C release .
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-release
+          path: MyGame-linux-${{ github.ref_name }}.tar.gz
+
+  # ──────────────────────────────────────────────
+  # Publish GitHub Release
+  # ──────────────────────────────────────────────
+  release:
+    needs: [build-windows, build-linux]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-release
+
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-release
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --title "${{ github.ref_name }}" \
+            --notes "See the [README](https://github.com/${{ github.repository }}/blob/${{ github.ref_name }}/README.md) for details." \
+            "MyGame-windows-${{ github.ref_name }}.zip" \
+            "MyGame-linux-${{ github.ref_name }}.tar.gz"
